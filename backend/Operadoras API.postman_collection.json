@@ -1,0 +1,142 @@
+{
+	"info": {
+		"_postman_id": "9858c9e2-1de9-45b6-b28c-9f38f33b2b15",
+		"name": "Operadoras API",
+		"description": "Coleção de testes para a API de Operadoras",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14662325"
+	},
+	"item": [
+		{
+			"name": "Listar operadoras sem filtros (Página 1)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BACKEND_URL}}/operadoras?page=1&page_size=5",
+					"host": [
+						"{{BACKEND_URL}}"
+					],
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "5"
+						}
+					]
+				},
+				"description": "**Descrição**: Retorna a 1ª página, com 5 registros por página, sem filtros.EndFragment"
+			},
+			"response": []
+		},
+		{
+			"name": "Listar operadoras ordenadas e filtradas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BACKEND_URL}}/operadoras?uf=SP&cidade=paulo&razao_social=unimed&page=1&page_size=3&sort_by=data_registro&sort_order=asc\n",
+					"host": [
+						"{{BACKEND_URL}}"
+					],
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "uf",
+							"value": "SP"
+						},
+						{
+							"key": "cidade",
+							"value": "paulo"
+						},
+						{
+							"key": "razao_social",
+							"value": "unimed"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "3"
+						},
+						{
+							"key": "sort_by",
+							"value": "data_registro"
+						},
+						{
+							"key": "sort_order",
+							"value": "asc\n"
+						}
+					]
+				},
+				"description": "**Descrição**: Filtra onde `uf=SP` e “cidade” contém “paulo”, página 1, 5 registros."
+			},
+			"response": []
+		},
+		{
+			"name": "Listar operadoras filtradas por UF e Cidade Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BACKEND_URL}}/operadoras?uf=SP&cidade=paulo&razao_social=unimed&page=1&page_size=3&sort_by=data_registro&sort_order=asc\n",
+					"host": [
+						"{{BACKEND_URL}}"
+					],
+					"path": [
+						"operadoras"
+					],
+					"query": [
+						{
+							"key": "uf",
+							"value": "SP"
+						},
+						{
+							"key": "cidade",
+							"value": "paulo"
+						},
+						{
+							"key": "razao_social",
+							"value": "unimed"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "page_size",
+							"value": "3"
+						},
+						{
+							"key": "sort_by",
+							"value": "data_registro"
+						},
+						{
+							"key": "sort_order",
+							"value": "asc\n"
+						}
+					]
+				},
+				"description": "**Descrição**: Combina UF=SP, cidade contendo “paulo”, razão_social contendo “unimed” e ordena por data_registro ascendente, retornando página 1 de 3 registros."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "BACKEND_URL",
+			"value": "http://127.0.0.1:8080",
+			"type": "default"
+		}
+	]
+}
