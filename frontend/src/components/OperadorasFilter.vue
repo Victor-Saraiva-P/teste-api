@@ -1,48 +1,74 @@
 <script setup lang="ts">
-import { ref, reactive, defineEmits } from 'vue';
-import { OperadorasFilter } from '../types/operadora';
+import { ref, reactive, defineEmits } from "vue";
+import { OperadorasFilter } from "../types/operadora";
 
 const emit = defineEmits<{
-  filter: [filter: OperadorasFilter]
+  filter: [filter: OperadorasFilter];
 }>();
 
-// Available UFs for the dropdown
-const ufs = ['AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 'ES', 'GO', 'MA', 
-             'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 
-             'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO'];
+// UFs
+const ufs = [
+  "AC",
+  "AL",
+  "AP",
+  "AM",
+  "BA",
+  "CE",
+  "DF",
+  "ES",
+  "GO",
+  "MA",
+  "MT",
+  "MS",
+  "MG",
+  "PA",
+  "PB",
+  "PR",
+  "PE",
+  "PI",
+  "RJ",
+  "RN",
+  "RS",
+  "RO",
+  "RR",
+  "SC",
+  "SP",
+  "SE",
+  "TO",
+];
 
 const filter = reactive<OperadorasFilter>({
-  uf: '',
-  cidade: '',
-  razao_social: '',
+  uf: "",
+  cidade: "",
+  razao_social: "",
   page: 1,
   // FIXO: Número de itens por página definido como constante (10)
   page_size: 10,
-  sort_by: 'razao_social',
-  sort_order: 'asc'
+  sort_by: "razao_social",
+  sort_order: "asc",
 });
 
 // Sorting options
 const sortOptions = [
-  { value: 'razao_social', label: 'Razão Social' },
-  { value: 'nome_fantasia', label: 'Nome Fantasia' },
-  { value: 'data_registro', label: 'Data de Registro' },
-  { value: 'cidade', label: 'Cidade' },
-  { value: 'uf', label: 'UF' }
+  { value: "razao_social", label: "Razão Social" },
+  { value: "nome_fantasia", label: "Nome Fantasia" },
+  { value: "data_registro", label: "Data de Registro" },
+  { value: "cidade", label: "Cidade" },
+  { value: "uf", label: "UF" },
 ];
 
 const applyFilter = () => {
-  emit('filter', { ...filter });
+  emit("filter", { ...filter });
 };
 
 const resetFilter = () => {
-  filter.uf = '';
-  filter.cidade = '';
-  filter.razao_social = '';
+  filter.uf = "";
+  filter.cidade = "";
+  filter.razao_social = "";
   filter.page = 1;
-  filter.sort_by = 'razao_social';
-  filter.sort_order = 'asc';
-  emit('filter', { ...filter });
+  filter.sort_by = "razao_social";
+  filter.sort_order = "asc";
+  emit("filter", { ...filter });
 };
 </script>
 
@@ -50,16 +76,16 @@ const resetFilter = () => {
   <div class="filter-container">
     <!-- Barra de pesquisa por razão social destacada -->
     <div class="search-bar">
-      <input 
-        id="razao-social" 
-        type="text" 
-        v-model="filter.razao_social" 
+      <input
+        id="razao-social"
+        type="text"
+        v-model="filter.razao_social"
         placeholder="Pesquisar por razão social..."
         @keyup.enter="applyFilter"
-      >
+      />
       <button class="search-button" @click="applyFilter">Buscar</button>
     </div>
-    
+
     <div class="filter-toggles">
       <details class="filter-details">
         <summary>Filtros adicionais</summary>
@@ -69,26 +95,37 @@ const resetFilter = () => {
               <label for="uf">UF</label>
               <select id="uf" v-model="filter.uf">
                 <option value="">Todos</option>
-                <option v-for="uf in ufs" :key="uf" :value="uf">{{ uf }}</option>
+                <option v-for="uf in ufs" :key="uf" :value="uf">
+                  {{ uf }}
+                </option>
               </select>
             </div>
-            
+
             <div class="filter-item">
               <label for="cidade">Cidade</label>
-              <input id="cidade" type="text" v-model="filter.cidade" placeholder="Filtrar por cidade">
+              <input
+                id="cidade"
+                type="text"
+                v-model="filter.cidade"
+                placeholder="Filtrar por cidade"
+              />
             </div>
           </div>
-          
+
           <div class="filter-row">
             <div class="filter-item">
               <label for="sort-by">Ordenar por</label>
               <select id="sort-by" v-model="filter.sort_by">
-                <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+                <option
+                  v-for="option in sortOptions"
+                  :key="option.value"
+                  :value="option.value"
+                >
                   {{ option.label }}
                 </option>
               </select>
             </div>
-            
+
             <div class="filter-item">
               <label for="sort-order">Ordem</label>
               <select id="sort-order" v-model="filter.sort_order">
@@ -97,10 +134,14 @@ const resetFilter = () => {
               </select>
             </div>
           </div>
-          
+
           <div class="filter-buttons">
-            <button class="btn btn-primary" @click="applyFilter">Aplicar</button>
-            <button class="btn btn-secondary" @click="resetFilter">Limpar</button>
+            <button class="btn btn-primary" @click="applyFilter">
+              Aplicar
+            </button>
+            <button class="btn btn-secondary" @click="resetFilter">
+              Limpar
+            </button>
           </div>
         </div>
       </details>
@@ -202,7 +243,8 @@ summary:focus {
   color: #666;
 }
 
-input, select {
+input,
+select {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;

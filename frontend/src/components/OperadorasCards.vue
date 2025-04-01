@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
-import { Operadora } from '../types/operadora';
+import { defineProps } from "vue";
+import { Operadora } from "../types/operadora";
 
 defineProps<{
   operadoras: Operadora[];
@@ -24,16 +24,18 @@ const formatPhone = (
 
 <template>
   <div class="cards-container">
-    <div v-if="loading" class="loading-message">
-      Carregando dados...
-    </div>
-    
+    <div v-if="loading" class="loading-message">Carregando dados...</div>
+
     <div v-else-if="operadoras.length === 0" class="no-data-message">
       Nenhuma operadora encontrada
     </div>
-    
+
     <div v-else class="cards-grid">
-      <div v-for="operadora in operadoras" :key="operadora.registro_ans" class="operadora-card">
+      <div
+        v-for="operadora in operadoras"
+        :key="operadora.registro_ans"
+        class="operadora-card"
+      >
         <!-- Card Header with Razão Social -->
         <div class="card-header">
           <div class="header-content">
@@ -41,7 +43,7 @@ const formatPhone = (
             <div class="registro-ans">ANS: {{ operadora.registro_ans }}</div>
           </div>
         </div>
-        
+
         <!-- Card Body -->
         <div class="card-body">
           <!-- Basic Info Section -->
@@ -50,7 +52,9 @@ const formatPhone = (
             <div class="info-grid">
               <div class="info-item">
                 <span class="info-label">Nome Fantasia</span>
-                <span class="info-value">{{ operadora.nome_fantasia || "-" }}</span>
+                <span class="info-value">{{
+                  operadora.nome_fantasia || "-"
+                }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">CNPJ</span>
@@ -62,18 +66,22 @@ const formatPhone = (
               </div>
               <div class="info-item">
                 <span class="info-label">Data de Registro</span>
-                <span class="info-value">{{ formatDate(operadora.data_registro) }}</span>
+                <span class="info-value">{{
+                  formatDate(operadora.data_registro)
+                }}</span>
               </div>
             </div>
           </div>
-          
+
           <!-- Contact Info Section -->
           <div class="info-section">
             <h4>Contato</h4>
             <div class="info-grid">
               <div class="info-item">
                 <span class="info-label">Telefone</span>
-                <span class="info-value">{{ formatPhone(operadora.ddd, operadora.telefone) }}</span>
+                <span class="info-value">{{
+                  formatPhone(operadora.ddd, operadora.telefone)
+                }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">Email</span>
@@ -81,33 +89,44 @@ const formatPhone = (
               </div>
               <div class="info-item">
                 <span class="info-label">Representante</span>
-                <span class="info-value">{{ operadora.representante || "-" }}</span>
+                <span class="info-value">{{
+                  operadora.representante || "-"
+                }}</span>
               </div>
               <div class="info-item">
                 <span class="info-label">Cargo</span>
-                <span class="info-value">{{ operadora.cargo_representante || "-" }}</span>
+                <span class="info-value">{{
+                  operadora.cargo_representante || "-"
+                }}</span>
               </div>
             </div>
           </div>
-          
+
           <!-- Address Section -->
           <div class="info-section">
             <h4>Endereço</h4>
             <div class="address">
               <p>
-                {{ operadora.logradouro || '-' }}, {{ operadora.numero || '-' }}
-                {{ operadora.complemento ? `, ${operadora.complemento}` : '' }}
+                {{ operadora.logradouro || "-" }}, {{ operadora.numero || "-" }}
+                {{ operadora.complemento ? `, ${operadora.complemento}` : "" }}
               </p>
-              <p>{{ operadora.bairro || '-' }} - {{ operadora.cidade }}/{{ operadora.uf }}</p>
-              <p>CEP: {{ operadora.cep || '-' }}</p>
+              <p>
+                {{ operadora.bairro || "-" }} - {{ operadora.cidade }}/{{
+                  operadora.uf
+                }}
+              </p>
+              <p>CEP: {{ operadora.cep || "-" }}</p>
             </div>
           </div>
         </div>
-        
+
         <!-- Card Footer -->
         <div class="card-footer">
           <div class="regiao">
-            <span>Região de Comercialização: {{ operadora.regiao_de_comercializacao || '-' }}</span>
+            <span
+              >Região de Comercialização:
+              {{ operadora.regiao_de_comercializacao || "-" }}</span
+            >
           </div>
         </div>
       </div>
@@ -225,7 +244,8 @@ const formatPhone = (
   color: #555;
 }
 
-.loading-message, .no-data-message {
+.loading-message,
+.no-data-message {
   text-align: center;
   padding: 2rem;
   font-style: italic;
@@ -240,7 +260,7 @@ const formatPhone = (
   .cards-grid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }

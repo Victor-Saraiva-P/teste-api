@@ -36,5 +36,5 @@ export interface OperadorasFilter {
   page: number;
   page_size: number;
   sort_by?: string;
-  sort_order?: 'asc' | 'desc';
+  sort_order?: "asc" | "desc";
 }

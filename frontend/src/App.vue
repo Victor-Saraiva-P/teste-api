@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { OperadorasService } from './services/api';
-import { Operadora, OperadorasFilter } from './types/operadora';
-import OperadorasFilterComponent from './components/OperadorasFilter.vue';
-import OperadorasCards from './components/OperadorasCards.vue';
-import OperadorasPagination from './components/OperadorasPagination.vue';
-import operadorasIcon from './assets/icone-operadores.png';
+import { ref, reactive, onMounted } from "vue";
+import { OperadorasService } from "./services/api";
+import { Operadora, OperadorasFilter } from "./types/operadora";
+import OperadorasFilterComponent from "./components/OperadorasFilter.vue";
+import OperadorasCards from "./components/OperadorasCards.vue";
+import OperadorasPagination from "./components/OperadorasPagination.vue";
+import operadorasIcon from "./assets/icone-operadores.png";
 
 const operadoras = ref<Operadora[]>([]);
 const loading = ref(true);
@@ -26,16 +26,16 @@ const fetchOperadoras = async () => {
   loading.value = true;
   error.value = null;
   try {
-    console.log('Fetching operadoras with filter:', filter);
+    console.log("Fetching operadoras with filter:", filter);
     const response = await OperadorasService.getOperadoras(filter);
-    console.log('API response:', response);
+    console.log("API response:", response);
     operadoras.value = response.items;
     totalPages.value = response.total_pages;
     currentPage.value = response.page;
     totalItems.value = response.total;
   } catch (err: any) {
-    console.error('Error fetching operadoras:', err);
-    error.value = err.message || 'Erro ao carregar dados';
+    console.error("Error fetching operadoras:", err);
+    error.value = err.message || "Erro ao carregar dados";
   } finally {
     loading.value = false;
   }
@@ -54,7 +54,7 @@ const handlePageChange = (page: number) => {
 };
 
 onMounted(() => {
-  console.log('App component mounted');
+  console.log("App component mounted");
   fetchOperadoras();
 });
 </script>
@@ -67,26 +67,24 @@ onMounted(() => {
         <h1>Sistema de Operadoras de Saúde</h1>
       </div>
     </header>
-    
+
     <main>
       <div v-if="error" class="error-message">
         {{ error }}
       </div>
-      
+
       <OperadorasFilterComponent @filter="handleFilter" />
-      
+
       <div class="results-info">
         <p v-if="!loading">
-          Exibindo {{ operadoras.length }} de {{ totalItems }} operadoras encontradas
+          Exibindo {{ operadoras.length }} de {{ totalItems }} operadoras
+          encontradas
         </p>
       </div>
-      
-      <OperadorasCards 
-        :operadoras="operadoras" 
-        :loading="loading" 
-      />
-      
-      <OperadorasPagination 
+
+      <OperadorasCards :operadoras="operadoras" :loading="loading" />
+
+      <OperadorasPagination
         v-if="totalPages > 0"
         :current-page="currentPage"
         :total-pages="totalPages"
@@ -103,7 +101,7 @@ body {
   background-color: #f8f9fa;
   margin: 0;
   min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 #app {
