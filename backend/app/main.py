@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 import logging
 from app.controller.operadoras_controller import router as operadoras_router
 from app.startup.downloader import baixar_operadoras_csv
@@ -9,13 +10,10 @@ from app.config import OPERADORAS_URL, PASTA_DOWNLOAD
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-app = FastAPI()
 
-# "Montamos" as rotas do APIRouter das operadoras
-app.include_router(operadoras_router)
-
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Código executado durante a inicialização
     try:
         logger.info("Iniciando download dos dados...")
         pasta_destino = f"{PASTA_DOWNLOAD}/operadoras"
@@ -31,10 +29,24 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erro durante a inicialização: {str(e)}")
 
+    yield  # Servidor está funcionando
+
+    # Código executado durante o desligamento
+    # Se houver código para executar durante o shutdown, coloque aqui
+
+
+app = FastAPI(lifespan=lifespan)
+
+# "Montamos" as rotas do APIRouter das operadoras
+app.include_router(operadoras_router)
+
+
 @app.get("/")
 def root():
     return {"mensagem": "API de Operadoras ativa!"}
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8080)
