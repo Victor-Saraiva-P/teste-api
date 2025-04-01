@@ -1,10 +1,12 @@
-from fastapi import FastAPI
-from contextlib import asynccontextmanager
 import logging
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
+from app.config import OPERADORAS_URL, PASTA_DOWNLOAD
 from app.controller.operadoras_controller import router as operadoras_router
 from app.startup.downloader import baixar_operadoras_csv
 from app.startup.load_data import carregar_dados
-from app.config import OPERADORAS_URL, PASTA_DOWNLOAD
 
 # Configuração básica de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
