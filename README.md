@@ -32,6 +32,11 @@ Este projeto é um sistema completo para consulta de operadoras de planos de sa�
 - **Bibliotecas:**
     -  `axios` – Para requisições HTTP
 
+
+### testes
+
+- **Postman:** Na raiz do backend existe o arquivo Operadoras API.postman_collection.json, contendo uma coleção com três exemplos de uso da API para facilitar os testes e exploração dos endpoints.
+
 ## Funcionalidades
 
 - **Download Automático de Dados:** O sistema baixa automaticamente os dados mais recentes das operadoras de saúde diretamente do site da ANS.
