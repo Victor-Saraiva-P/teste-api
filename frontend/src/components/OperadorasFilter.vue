@@ -16,7 +16,8 @@ const filter = reactive<OperadorasFilter>({
   cidade: '',
   razao_social: '',
   page: 1,
-  page_size: 5,
+  // FIXO: Número de itens por página definido como constante (10)
+  page_size: 10,
   sort_by: 'razao_social',
   sort_order: 'asc'
 });
@@ -47,77 +48,138 @@ const resetFilter = () => {
 
 <template>
   <div class="filter-container">
-    <h2>Filtros</h2>
-    <div class="filter-form">
-      <div class="filter-row">
-        <div class="filter-item">
-          <label for="uf">UF</label>
-          <select id="uf" v-model="filter.uf">
-            <option value="">Todos</option>
-            <option v-for="uf in ufs" :key="uf" :value="uf">{{ uf }}</option>
-          </select>
+    <!-- Barra de pesquisa por razão social destacada -->
+    <div class="search-bar">
+      <input 
+        id="razao-social" 
+        type="text" 
+        v-model="filter.razao_social" 
+        placeholder="Pesquisar por razão social..."
+        @keyup.enter="applyFilter"
+      >
+      <button class="search-button" @click="applyFilter">Buscar</button>
+    </div>
+    
+    <div class="filter-toggles">
+      <details class="filter-details">
+        <summary>Filtros adicionais</summary>
+        <div class="filter-form">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="uf">UF</label>
+              <select id="uf" v-model="filter.uf">
+                <option value="">Todos</option>
+                <option v-for="uf in ufs" :key="uf" :value="uf">{{ uf }}</option>
+              </select>
+            </div>
+            
+            <div class="filter-item">
+              <label for="cidade">Cidade</label>
+              <input id="cidade" type="text" v-model="filter.cidade" placeholder="Filtrar por cidade">
+            </div>
+          </div>
+          
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="sort-by">Ordenar por</label>
+              <select id="sort-by" v-model="filter.sort_by">
+                <option v-for="option in sortOptions" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </option>
+              </select>
+            </div>
+            
+            <div class="filter-item">
+              <label for="sort-order">Ordem</label>
+              <select id="sort-order" v-model="filter.sort_order">
+                <option value="asc">Crescente</option>
+                <option value="desc">Decrescente</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="filter-buttons">
+            <button class="btn btn-primary" @click="applyFilter">Aplicar</button>
+            <button class="btn btn-secondary" @click="resetFilter">Limpar</button>
+          </div>
         </div>
-        
-        <div class="filter-item">
-          <label for="cidade">Cidade</label>
-          <input id="cidade" type="text" v-model="filter.cidade" placeholder="Filtrar por cidade">
-        </div>
-        
-        <div class="filter-item">
-          <label for="razao-social">Razão Social</label>
-          <input id="razao-social" type="text" v-model="filter.razao_social" placeholder="Filtrar por razão social">
-        </div>
-      </div>
-      
-      <div class="filter-row">
-        <div class="filter-item">
-          <label for="sort-by">Ordenar por</label>
-          <select id="sort-by" v-model="filter.sort_by">
-            <option v-for="option in sortOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-        </div>
-        
-        <div class="filter-item">
-          <label for="sort-order">Ordem</label>
-          <select id="sort-order" v-model="filter.sort_order">
-            <option value="asc">Crescente</option>
-            <option value="desc">Decrescente</option>
-          </select>
-        </div>
-        
-        <div class="filter-item">
-          <label for="page-size">Itens por página</label>
-          <select id="page-size" v-model="filter.page_size">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
-        </div>
-      </div>
-      
-      <div class="filter-buttons">
-        <button class="btn btn-primary" @click="applyFilter">Aplicar Filtros</button>
-        <button class="btn btn-secondary" @click="resetFilter">Limpar Filtros</button>
-      </div>
+      </details>
     </div>
   </div>
 </template>
 
 <style scoped>
 .filter-container {
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo mais proeminente para a barra de pesquisa */
+.search-bar {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid #e2e2e2;
+  border-radius: 8px 0 0 8px;
+  font-size: 1.1rem;
+  transition: border-color 0.3s;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #646cff;
+}
+
+.search-button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  padding: 0 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-button:hover {
+  background-color: #535bf2;
+}
+
+/* Filtros adicionais em um menu colapsável */
+.filter-toggles {
+  width: 100%;
+}
+
+.filter-details {
+  width: 100%;
+}
+
+summary {
+  cursor: pointer;
+  padding: 0.5rem 0;
+  color: #646cff;
+  font-weight: 500;
+  user-select: none;
+}
+
+summary:focus {
+  outline: none;
 }
 
 .filter-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
 }
 
 .filter-row {
@@ -128,7 +190,7 @@ const resetFilter = () => {
 
 .filter-item {
   flex: 1;
-  min-width: 200px;
+  min-width: 180px;
   display: flex;
   flex-direction: column;
 }
@@ -136,26 +198,28 @@ const resetFilter = () => {
 .filter-item label {
   margin-bottom: 0.5rem;
   font-weight: 500;
+  font-size: 0.85rem;
+  color: #666;
 }
 
 input, select {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .filter-buttons {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .btn {
-  padding: 0.6em 1.2em;
-  border-radius: 8px;
+  padding: 0.5em 1em;
+  border-radius: 4px;
   border: 1px solid transparent;
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.25s;
