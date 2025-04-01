@@ -3,6 +3,8 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+from app.config import NOME_ARQUIVO_CSV
+
 
 def obter_sopa(url: str) -> BeautifulSoup:
     resposta = requests.get(url)
@@ -50,11 +52,26 @@ def baixar_operadoras_csv(url_base: str, pasta_destino: str):
     links_csv = obter_links_arquivos(url_base, ".csv")
     logging.info(f"Foram encontrados {len(links_csv)} arquivos CSV.")
 
-    # Verifica se existe pelo menos dois links e seleciona o segundo.
-    if links_csv and len(links_csv) > 1:
-        url_segundo = links_csv[1]
-        logging.info(f"Selecionado o segundo arquivo: {url_segundo}")
-        return baixar_arquivo(url_segundo, pasta_destino)
+    # Verifica se existe pelo menos um arquivo
+    if not links_csv:
+        logging.warning("Nenhum arquivo CSV encontrado.")
+        return None
+
+    # Procura especificamente pelo arquivo
+    arquivo_desejado = None
+    for link in links_csv:
+        if link.endswith(NOME_ARQUIVO_CSV):
+            arquivo_desejado = link
+            logging.info(f"Arquivo Relatorio_cadop.csv encontrado: {arquivo_desejado}")
+            break
+
+    # Se não encontrou o arquivo específico, usa o primeiro da lista
+    if not arquivo_desejado and links_csv:
+        arquivo_desejado = links_csv[0]
+        logging.info(
+            f"Arquivo Relatorio_cadop.csv não encontrado. Usando o primeiro arquivo disponível: {arquivo_desejado}")
+
+    if arquivo_desejado:
+        return baixar_arquivo(arquivo_desejado, pasta_destino)
     else:
-        logging.warning("Nenhum segundo arquivo CSV encontrado.")
         return None
