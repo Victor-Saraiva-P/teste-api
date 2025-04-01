@@ -7,6 +7,11 @@
 # Teste de API
 
 Este projeto é um sistema completo para consulta de operadoras de planos de saúde ativas no Brasil. Utiliza dados abertos da ANS (Agência Nacional de Saúde Suplementar) para disponibilizar informações detalhadas sobre operadoras através de uma API REST e uma interface web moderna.
+
+
+![Descrição da imagem](./screenshot.png)
+
+
 ## Stack Utilizada
 
 ### backend
