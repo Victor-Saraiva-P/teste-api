@@ -13,9 +13,12 @@ const currentPage = ref(1);
 const totalItems = ref(0);
 const error = ref<string | null>(null);
 
+// FIXO: Número de itens por página definido como constante (10)
+const ITEMS_PER_PAGE = 10;
+
 const filter = reactive<OperadorasFilter>({
   page: 1,
-  page_size: 5,
+  page_size: ITEMS_PER_PAGE,
 });
 
 const fetchOperadoras = async () => {
@@ -38,6 +41,8 @@ const fetchOperadoras = async () => {
 };
 
 const handleFilter = (newFilter: OperadorasFilter) => {
+  // Garantir que o page_size definido pelo componente de filtro não substitua o valor constante
+  newFilter.page_size = ITEMS_PER_PAGE;
   Object.assign(filter, newFilter);
   fetchOperadoras();
 };
@@ -57,7 +62,6 @@ onMounted(() => {
   <div class="container">
     <header>
       <h1>Sistema de Operadoras de Saúde</h1>
-      <p class="debug-info">App está renderizando corretamente</p>
     </header>
     
     <main>
@@ -119,15 +123,6 @@ header {
 header h1 {
   color: #333;
   margin-bottom: 0.5rem;
-}
-
-.debug-info {
-  background-color: #e6f7ff;
-  border: 1px solid #91d5ff;
-  padding: 4px 8px;
-  color: #0050b3;
-  border-radius: 4px;
-  font-size: 0.85rem;
 }
 
 .results-info {
