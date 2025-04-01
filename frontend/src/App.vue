@@ -5,6 +5,7 @@ import { Operadora, OperadorasFilter } from './types/operadora';
 import OperadorasFilterComponent from './components/OperadorasFilter.vue';
 import OperadorasCards from './components/OperadorasCards.vue';
 import OperadorasPagination from './components/OperadorasPagination.vue';
+import operadorasIcon from './assets/icone-operadores.png';
 
 const operadoras = ref<Operadora[]>([]);
 const loading = ref(true);
@@ -61,7 +62,10 @@ onMounted(() => {
 <template>
   <div class="container">
     <header>
-      <h1>Sistema de Operadoras de Saúde</h1>
+      <div class="header-content">
+        <img :src="operadorasIcon" alt="Ícone Operadoras" class="header-icon" />
+        <h1>Sistema de Operadoras de Saúde</h1>
+      </div>
     </header>
     
     <main>
@@ -99,6 +103,7 @@ body {
   background-color: #f8f9fa;
   margin: 0;
   min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
 #app {
@@ -120,9 +125,23 @@ header {
   text-align: center;
 }
 
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.header-icon {
+  height: 40px;
+  width: auto;
+}
+
 header h1 {
   color: #333;
   margin-bottom: 0.5rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .results-info {
