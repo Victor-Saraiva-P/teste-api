@@ -1,30 +1,147 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref, reactive, onMounted } from 'vue';
+import { OperadorasService } from './services/api';
+import { Operadora, OperadorasFilter } from './types/operadora';
+import OperadorasFilterComponent from './components/OperadorasFilter.vue';
+import OperadorasCards from './components/OperadorasCards.vue';
+import OperadorasPagination from './components/OperadorasPagination.vue';
+
+const operadoras = ref<Operadora[]>([]);
+const loading = ref(true);
+const totalPages = ref(0);
+const currentPage = ref(1);
+const totalItems = ref(0);
+const error = ref<string | null>(null);
+
+const filter = reactive<OperadorasFilter>({
+  page: 1,
+  page_size: 5,
+});
+
+const fetchOperadoras = async () => {
+  loading.value = true;
+  error.value = null;
+  try {
+    console.log('Fetching operadoras with filter:', filter);
+    const response = await OperadorasService.getOperadoras(filter);
+    console.log('API response:', response);
+    operadoras.value = response.items;
+    totalPages.value = response.total_pages;
+    currentPage.value = response.page;
+    totalItems.value = response.total;
+  } catch (err: any) {
+    console.error('Error fetching operadoras:', err);
+    error.value = err.message || 'Erro ao carregar dados';
+  } finally {
+    loading.value = false;
+  }
+};
+
+const handleFilter = (newFilter: OperadorasFilter) => {
+  Object.assign(filter, newFilter);
+  fetchOperadoras();
+};
+
+const handlePageChange = (page: number) => {
+  filter.page = page;
+  fetchOperadoras();
+};
+
+onMounted(() => {
+  console.log('App component mounted');
+  fetchOperadoras();
+});
 </script>
 
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="container">
+    <header>
+      <h1>Sistema de Operadoras de Saúde</h1>
+      <p class="debug-info">App está renderizando corretamente</p>
+    </header>
+    
+    <main>
+      <div v-if="error" class="error-message">
+        {{ error }}
+      </div>
+      
+      <OperadorasFilterComponent @filter="handleFilter" />
+      
+      <div class="results-info">
+        <p v-if="!loading">
+          Exibindo {{ operadoras.length }} de {{ totalItems }} operadoras encontradas
+        </p>
+      </div>
+      
+      <OperadorasCards 
+        :operadoras="operadoras" 
+        :loading="loading" 
+      />
+      
+      <OperadorasPagination 
+        v-if="totalPages > 0"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        @update:page="handlePageChange"
+      />
+    </main>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<style>
+/* Global styles */
+body {
+  color: #333;
+  background-color: #f8f9fa;
+  margin: 0;
+  min-height: 100vh;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+#app {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  text-align: left;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+header h1 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.debug-info {
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+  padding: 4px 8px;
+  color: #0050b3;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.results-info {
+  margin-bottom: 1rem;
+  font-style: italic;
+  color: #666;
+}
+
+.error-message {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #cf1322;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
 }
 </style>
