@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import logging
+from app.controller.operadoras_controller import router as operadoras_router
 from app.startup.downloader import baixar_operadoras_csv
 from app.startup.load_data import carregar_dados
 from app.config import OPERADORAS_URL, PASTA_DOWNLOAD
@@ -10,10 +11,11 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
+# "Montamos" as rotas do APIRouter das operadoras
+app.include_router(operadoras_router)
 
 @app.on_event("startup")
 async def startup_event():
-    """Executa as funções de download e carregamento de dados na inicialização."""
     try:
         logger.info("Iniciando download dos dados...")
         pasta_destino = f"{PASTA_DOWNLOAD}/operadoras"
@@ -21,7 +23,6 @@ async def startup_event():
 
         if arquivo_csv:
             logger.info(f"Download concluído: {arquivo_csv}")
-
             logger.info("Iniciando carregamento de dados para o banco...")
             carregar_dados()
             logger.info("Carregamento de dados concluído.")
@@ -30,12 +31,10 @@ async def startup_event():
     except Exception as e:
         logger.error(f"Erro durante a inicialização: {str(e)}")
 
-
 @app.get("/")
-def read_root():
-    return {"mensagem": "Olá, FastAPI!"}
+def root():
+    return {"mensagem": "API de Operadoras ativa!"}
 
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8080)
